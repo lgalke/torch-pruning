@@ -4,6 +4,8 @@ Pruning methods for pytorch with an optimizer-like interface
 ```python
 import pruning
 
+net = # some pytorch model
+
 criterion = nn.MSELoss()
 optimizer = torch.optim.SGD(net.parameters(), 0.01, weight_decay=1e-5)
 # Init pruning method with model parameters
@@ -18,7 +20,7 @@ for x, y in train_loader:
     # Zero out parameters that are already pruned
     pruning.zero_params(masks)
     y_hat = net(x)
-    loss = criterion(y_hat, y.unsqueeze(1))
+    loss = criterion(y_hat, y)
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
