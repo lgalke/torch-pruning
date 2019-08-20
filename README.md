@@ -15,8 +15,8 @@ pruning = MagnitudePruning(net.parameters(), 0.1, local=True,
 # Save initial parameters for later
 w_0 = pruning.clone_params()
 
-# Train one epoch
 def train(net):
+    # Some standard training loop ...
     for epoch in range(n_epochs):
         for x, y in dataloader:
             # Do actually set *pruned* weights to zero
