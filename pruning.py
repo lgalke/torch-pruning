@@ -17,13 +17,17 @@ def cut(pruning_rate, flat_params):
 class MagnitudePruning():
     """ Magnitude pruning with an optimizer-like interface  """
 
-    def __init__(self, params, pruning_rate=0.25, local=True):
+    def __init__(self, params, pruning_rate=0.25, local=True,
+                 exclude_biases=False):
         """ Init pruning method """
         self.local = bool(local)
         self.pruning_rate = float(pruning_rate)
 
-        # Discover all non-bias parameters
-        self.params = [p for p in params if p.dim() > 1]
+        if exclude_biases:
+            # Discover all non-bias parameters
+            self.params = [p for p in params if p.dim() > 1]
+        else:
+            self.params = [p for p in params]
 
         # init masks to all ones
         masks = []

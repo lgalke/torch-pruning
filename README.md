@@ -2,36 +2,42 @@
 Pruning methods for pytorch with an optimizer-like interface
 
 ```python
+import torch
 import pruning
 
-net = # some pytorch model
+net = # an arbitrary pytorch model
 
-criterion = nn.MSELoss()
 optimizer = torch.optim.SGD(net.parameters(), 0.01, weight_decay=1e-5)
-# Init pruning method with model parameters
-pruning = MagnitudePruning(net.parameters(), 0.1, local=True)
+# Init pruning method in the same way as optimizer
+pruning = MagnitudePruning(net.parameters(), 0.1, local=True,
+                           exclude_biases=True)
 
-
-# Save initial parameters
+# Save initial parameters for later
 w_0 = pruning.clone_params()
 
 # Train one epoch
-for x, y in train_loader:
-    # Zero out parameters that are already pruned
-    pruning.zero_params(masks)
-    y_hat = net(x)
-    loss = criterion(y_hat, y)
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
-    epoch_loss += loss.item()
+def train(net):
+    for epoch in range(n_epochs):
+        for x, y in dataloader:
+            # Do actually set *pruned* weights to zero
+            pruning.zero_params(masks)
+            y_hat = net(x)
+            loss = criterion(y_hat, y)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            epoch_loss += loss.item()
 
+# Train epoch
+train(net)
 # Do prune!
 pruning.step()
-# Rewind the parameters to initalization values (as in the LTH)
+# Rewind parameters to their values at init
 pruning.rewind(w_0)
-
 # Train the pruned model
+train(net)
+
+# Check if you have found a winning ticket
 # ...
 
 ```
