@@ -1,6 +1,8 @@
 # torch-pruning
 Pruning methods for pytorch with an optimizer-like interface
 
+## usage
+
 ```python
 import torch
 import pruning
