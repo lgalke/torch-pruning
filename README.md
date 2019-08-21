@@ -11,8 +11,8 @@ net = # an arbitrary pytorch model
 
 optimizer = torch.optim.SGD(net.parameters(), 0.01, weight_decay=1e-5)
 # Init pruning method in the same way as optimizer
-pruning = MagnitudePruning(net.parameters(), 0.1, local=True,
-                           exclude_biases=True)
+pruning = pruning.MagnitudePruning(net.parameters(), 0.1, local=True,
+                                   exclude_biases=True)
 
 # Save initial parameters for later
 w_0 = pruning.clone_params()
