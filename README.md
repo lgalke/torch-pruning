@@ -7,7 +7,7 @@ Pruning methods for pytorch with an optimizer-like interface
 import torch
 import pruning
 
-net = # an arbitrary pytorch model
+net = # an arbitrary pytorch nn.Module instance
 
 optimizer = torch.optim.SGD(net.parameters(), 0.01, weight_decay=1e-5)
 # Init pruning method in the same way as optimizer
