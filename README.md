@@ -22,7 +22,7 @@ def train(net):
     for epoch in range(n_epochs):
         for x, y in dataloader:
             # Do actually set *pruned* weights to zero
-            pruning.zero_params(masks)
+            pruning.zero_params()
             y_hat = net(x)
             loss = criterion(y_hat, y)
             optimizer.zero_grad()
