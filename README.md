@@ -8,6 +8,7 @@ import torch
 import pruning
 
 net = # an arbitrary pytorch nn.Module instance
+dataloader = # some pytorch dataloader instance
 
 optimizer = torch.optim.SGD(net.parameters(), 0.01, weight_decay=1e-5)
 # Init pruning method in the same way as optimizer
@@ -17,7 +18,7 @@ pruning = pruning.MagnitudePruning(net.parameters(), 0.1, local=True,
 # Save initial parameters for later
 w_0 = pruning.clone_params()
 
-def train(net):
+def train(net, dataloader, n_epochs=1):
     # Some standard training loop ...
     for epoch in range(n_epochs):
         for x, y in dataloader:
@@ -28,18 +29,19 @@ def train(net):
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-            epoch_loss += loss.item()
+    
 
 # Train epoch
-train(net)
+train(net, dataloader, n_epochs=100)
 # Do prune!
 pruning.step()
 # Rewind parameters to their values at init
 pruning.rewind(w_0)
 # Train the pruned model
-train(net)
+train(net, n_epochs=100)
 
-# Check if you have found a winning ticket
+# Do train and prune in a for loop, and then
+# check if you have found a winning ticket
 # ...
 
 ```
