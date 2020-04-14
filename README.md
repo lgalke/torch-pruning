@@ -38,7 +38,7 @@ pruning.step()
 # Rewind parameters to their values at init
 pruning.rewind(w_0)
 # Train the pruned model
-train(net, n_epochs=100)
+train(net, dataloader, n_epochs=100)
 
 # Do train and prune in a for loop, and then
 # check if you have found a winning ticket
